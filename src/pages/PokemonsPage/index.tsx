@@ -1,9 +1,6 @@
 import { memo, useEffect } from 'react';
 
 import { Col, Container, Row } from 'react-bootstrap';
-
-// import LanguageSwitcher from 'components/LanguageSwitcher';
-
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { usePokemons } from 'context/PokemonsContext';
@@ -39,8 +36,8 @@ const PokemonsPage: React.FC = () => {
           >
             <Row className="row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
               {pokemons.map((pokemon) => (
-                <Col>
-                  <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                <Col key={pokemon.id}>
+                  <PokemonCard pokemon={pokemon} />
                 </Col>
               ))}
             </Row>

@@ -27,7 +27,7 @@ const PokemonPage: React.FC = () => {
   // const total = calcFeaturesTotal(pokemon.stats);
 
   useEffect(() => {
-    if (pokemon) setTitle(pokemon.name);
+    if (pokemon) setTitle(unslugfy(pokemon.name));
   }, [pokemon, setTitle]);
 
   useEffect(() => {

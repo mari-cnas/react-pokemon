@@ -3,7 +3,6 @@ import React, { Suspense } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import ReactDOM from 'react-dom/client';
 
-import 'services/i18n';
 import { PokemonsProvider } from 'context/PokemonsContext';
 
 import GraphQLClient from 'services/GraphQL';
