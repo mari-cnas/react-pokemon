@@ -19,7 +19,7 @@ const Header: React.FC<IBaseComponentProps> = () => {
             <h2>Olá, Mariana</h2>
             <h3>Bem Vinda! 😄</h3>
           </Col>
-          <Col className="d-flex justify-content-end mx-5 my-5">
+          <Col className="d-flex justify-content-end  my-5">
             {' '}
             <img className="img-fluid" src={profile} alt="profilepicture" />
           </Col>
