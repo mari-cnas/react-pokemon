@@ -1,6 +1,6 @@
 import { memo, useEffect } from 'react';
 
-import { Container } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 // import LanguageSwitcher from 'components/LanguageSwitcher';
 import {
   FaVenus,
@@ -16,6 +16,8 @@ import { calcFeaturesTotal } from 'context/PokemonsContext/helpers';
 import { unslugfy } from 'helpers';
 
 import useTitle from 'hooks/useTitle';
+
+import { LoadingDiv } from 'styles/GlobalStyles';
 
 import logo from '../../assets/pokemon_logo.png';
 import { Description, PokemonBg1, PokemonBg2, TypesBg } from './styled';
@@ -37,7 +39,11 @@ const PokemonPage: React.FC = () => {
 
   return (
     <>
-      {pokemonLoading && <p>Loading...</p>}
+      {pokemonLoading && (
+        <LoadingDiv className="d-flex aling-items-center justify-content-center">
+          <Spinner animation="border" variant="danger" className="my-auto" />
+        </LoadingDiv>
+      )}
       {!pokemonLoading &&
         pokemon &&
         pokemon.stats !== undefined &&

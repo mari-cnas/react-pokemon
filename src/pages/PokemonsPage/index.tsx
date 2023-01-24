@@ -1,6 +1,6 @@
 import { memo, useEffect } from 'react';
 
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { usePokemons } from 'context/PokemonsContext';
@@ -11,12 +11,14 @@ import PokemonCard from 'components/PokemonCard';
 
 import useTitle from 'hooks/useTitle';
 
+import { LoadingDiv } from 'styles/GlobalStyles';
+
 const PokemonsPage: React.FC = () => {
   const setTitle = useTitle();
   const { pokemons, loading, fetchNextPage, hasMorePages } = usePokemons();
 
   useEffect(() => {
-    setTitle('Pokemons');
+    setTitle('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -24,24 +26,30 @@ const PokemonsPage: React.FC = () => {
     <>
       <Header />
       <Container>
-        <h1 className="my-5">Qual pokemon você escolheria?</h1>
-        {loading && pokemons.length === 0 && <p>Loading...</p>}
+        {loading && pokemons.length === 0 && (
+          <LoadingDiv className="d-flex aling-items-center justify-content-center">
+            <Spinner animation="border" variant="danger" className="my-auto" />
+          </LoadingDiv>
+        )}
         {pokemons.length > 0 && Array.isArray(pokemons) && (
-          <InfiniteScroll
-            style={{ overflow: 'visible' }}
-            dataLength={pokemons.length}
-            next={fetchNextPage}
-            hasMore={hasMorePages}
-            loader={<h4>Loading...</h4>}
-          >
-            <Row className="row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-              {pokemons.map((pokemon) => (
-                <Col key={pokemon.id}>
-                  <PokemonCard pokemon={pokemon} />
-                </Col>
-              ))}
-            </Row>
-          </InfiniteScroll>
+          <>
+            <h1 className="my-5">Qual pokemon você escolheria?</h1>
+            <InfiniteScroll
+              style={{ overflow: 'visible' }}
+              dataLength={pokemons.length}
+              next={fetchNextPage}
+              hasMore={hasMorePages}
+              loader={<h4>Loading...</h4>}
+            >
+              <Row className="row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                {pokemons.map((pokemon) => (
+                  <Col key={pokemon.id}>
+                    <PokemonCard pokemon={pokemon} />
+                  </Col>
+                ))}
+              </Row>
+            </InfiniteScroll>
+          </>
         )}
       </Container>
       <Footer />
@@ -50,5 +58,3 @@ const PokemonsPage: React.FC = () => {
 };
 
 export default memo(PokemonsPage);
-
-// style={{ display: 'flex', flexDirection: 'column-reverse' }} // To put endMessage and loader to the top.

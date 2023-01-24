@@ -9,11 +9,11 @@ interface ICardContainerProps {
 }
 
 const colors: colorsType = {
-  blue: '#79e3f7',
+  blue: '#5ed5eb',
   red: '#fa847f',
   green: '#6dd2af',
-  white: '#e8e8e8',
-  yellow: '#fffa65',
+  white: '#d7d7d7',
+  yellow: '#e7e25a',
   purple: '#cd84f1',
   brown: '#a08679',
   pink: '#f5aee1',
@@ -44,13 +44,14 @@ export const CardBg = styled.div<ICardContainerProps>`
     fontColors[bgColor] ? fontColors[bgColor] : fontColors.default};
 `;
 
-export const TypesBg = styled.li`
-  background-color: rgba(255, 255, 255, 0.2);
+export const TypesBg = styled.div`
+  background-color: rgba(255, 255, 255, 0.25);
   border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const IdBg = styled.div<ICardContainerProps>`
-  //color: ${({ bgColor }) => colors[bgColor]};
-  //opacity: 0.5;
   color: rgba(0, 0, 0, 0.2);
 `;

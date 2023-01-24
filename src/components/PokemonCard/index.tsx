@@ -22,18 +22,17 @@ const PokemonCard: React.FC<IPokemonCardProps> = ({ pokemon }) => {
         <h2>#{String(pokemon.id).padStart(3, '0')}</h2>
       </IdBg>
       <Row className="flex-row ">
-        <Col className="col-md-6">
+        <Col className="col-md-6 ">
           <h2 className="mb-3">{unslugfy(pokemon.name)}</h2>
-
-          <ul>
+          <div className="d-flex flex-column align-items-start">
             {Array.isArray(pokemon.types) &&
               pokemon.types.length > 0 &&
               pokemon.types.map((_t) => (
-                <TypesBg key={_t} className="px-3 my-2 list-unstyled">
-                  {_t}
+                <TypesBg key={_t} className="my-1">
+                  <p className="py-0 px-3 my-0">{_t}</p>
                 </TypesBg>
               ))}
-          </ul>
+          </div>
         </Col>
         <Col className="d-flex col-md-6">
           <Link to={`/${pokemon.name}`} className="stretched-link">
