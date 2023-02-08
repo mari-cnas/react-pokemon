@@ -14,14 +14,6 @@ export const calcMaleGenderRatePercent = (value: number): number => {
   return result;
 };
 
-// export const calcFeaturesTotal = (arr: Array): number => {
-// let result = 0;
-// for (let i = 0; i < arr.length; i++) {
-//   result += arr[i];
-// }
-// return result;
-// };
-
 export const calcFeaturesTotal = (
   arr: { name: string; value: number }[],
 ): number => arr.reduce((acc, cur) => acc + cur.value, 0);

@@ -42,6 +42,12 @@ export const CardBg = styled.div<ICardContainerProps>`
   }
   color: ${({ bgColor }) =>
     fontColors[bgColor] ? fontColors[bgColor] : fontColors.default};
+
+  @media (min-width: 992px) {
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 export const TypesBg = styled.div`

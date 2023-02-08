@@ -1,6 +1,6 @@
-import { memo, useEffect } from 'react';
+import { memo, useMemo, useCallback, useEffect } from 'react';
 
-import { Container, Spinner } from 'react-bootstrap';
+import { Col, Container, ProgressBar, Row, Spinner } from 'react-bootstrap';
 // import LanguageSwitcher from 'components/LanguageSwitcher';
 import {
   FaVenus,
@@ -15,18 +15,34 @@ import { calcFeaturesTotal } from 'context/PokemonsContext/helpers';
 
 import { unslugfy } from 'helpers';
 
+import useCapitalize from 'hooks/useCapitalize';
 import useTitle from 'hooks/useTitle';
 
 import { LoadingDiv } from 'styles/GlobalStyles';
 
 import logo from '../../assets/pokemon_logo.png';
 import { Description, PokemonBg1, PokemonBg2, TypesBg } from './styled';
-// const total = calcFeaturesTotal(pokemon.stats);
+
 const PokemonPage: React.FC = () => {
   const setTitle = useTitle();
+  const setCapitalize = useCapitalize();
   const { name } = useParams();
   const { pokemon, pokemonLoading, fetchPokemon } = usePokemons();
-  // const total = calcFeaturesTotal(pokemon.stats);
+
+  const pokedexIndex = (id: number): string =>
+    `#${String(id).padStart(3, '0')}`;
+
+  const capitalizeStr = useCallback((text: string) => {
+    const str = text;
+    const capitalized = str[0].toUpperCase() + str.substring(1);
+    return capitalized;
+  }, []);
+
+  const totalStatsValue = useMemo(() => {
+    return pokemon?.stats
+      ?.map(({ value }) => value)
+      ?.reduce((stat, prev) => prev + stat, 0);
+  }, [pokemon?.stats]);
 
   useEffect(() => {
     if (pokemon) setTitle(unslugfy(pokemon.name));
@@ -55,15 +71,23 @@ const PokemonPage: React.FC = () => {
                 <Container>
                   <Link to="/">
                     <button type="button" className="btn px-0 text-white">
-                      ← Voltar
+                      ← Back
                     </button>
                   </Link>
                   <div>
                     <div className="mb-3 d-flex justify-content-between">
                       <h2>{unslugfy(pokemon.name)}</h2>
-                      <h2>#{String(pokemon.id).padStart(3, '0')}</h2>
+                      <h2>{pokedexIndex(pokemon.id)}</h2>
                     </div>
-                    <TypesBg className="px-3 py-1">Types</TypesBg>
+                    <div className="d-flex flex-column align-items-start">
+                      {Array.isArray(pokemon.types) &&
+                        pokemon.types.length > 0 &&
+                        pokemon.types.map((_t) => (
+                          <TypesBg key={_t} className="my-1">
+                            <p className="py-0 px-3 my-0">{_t}</p>
+                          </TypesBg>
+                        ))}
+                    </div>
                     <div className="d-flex justify-content-center">
                       {pokemon.image && (
                         <img
@@ -78,124 +102,166 @@ const PokemonPage: React.FC = () => {
                 </Container>
                 <Container>
                   <PokemonBg2 className="px-3 py-3">
-                    <Description bgColor={pokemon.color}>Descrição</Description>
+                    <Description bgColor={pokemon.color}>
+                      Description
+                    </Description>
                     <p>{pokemon.description}</p>
-                    <div className="d-flex justify-content-around">
-                      <div className="d-flex flex-column fw-bold">
+                    <Row className="my-4">
+                      <Col className="d-flex flex-column fw-bold align-items-center">
                         <span>
                           <FaBalanceScale />
                           {pokemon.weight}kg
                         </span>{' '}
                         <span>weight</span>
-                      </div>{' '}
-                      |
-                      <div className="d-flex flex-column fw-bold">
+                      </Col>{' '}
+                      <Col className="d-flex flex-column fw-bold align-items-center border-start border-end border-dark">
                         <span>
                           <FaRulerVertical />
                           {pokemon.height}m
                         </span>{' '}
                         <span>height</span>
-                      </div>{' '}
-                      |
-                      <div className="d-flex flex-column fw-bold">
+                      </Col>{' '}
+                      <Col className="d-flex flex-column fw-bold align-items-center">
                         <span>{unslugfy(pokemon?.move)}</span>
                         <span>main move</span>
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
                     <h2 className="my-2">Features</h2>
                     <p>
-                      Gender: <FaMars /> {pokemon?.gender?.m}% <FaVenus />
+                      Gender: <FaMars style={{ color: '#6C79DB' }} />{' '}
+                      {pokemon?.gender?.m}%{' '}
+                      <FaVenus style={{ color: '#F0729F' }} />
                       {pokemon?.gender?.f}%
                     </p>
-                    <div className="pe-5">
+                    <div>
                       <div className="d-flex row ">
-                        <span className="col col-md-2">Hip:</span>
-                        <span className="col col-md-1">
+                        <span className="col col-5 col-md-2">
+                          {capitalizeStr(pokemon.stats[0].name)}
+                        </span>
+                        <span className="col col-1">
                           {pokemon?.stats[0].value}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
                             role="progressbar"
-                            style={{ width: pokemon.stats[0].value }}
+                            variant={
+                              pokemon.stats[0].value >= 50
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={pokemon.stats[0].value}
                           />
                         </div>
                       </div>
-                      <div className="d-flex row">
-                        <span className="col col-md-2">Attack:</span>
-                        <span className="col col-md-1">
-                          {pokemon.stats[1].value}
+                      <div className="d-flex row ">
+                        <span className="col col-5 col-md-2">
+                          {capitalizeStr(pokemon.stats[1].name)}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: pokemon.stats[1].value }}
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex row">
-                        <span className="col col-md-2">Defense:</span>
-                        <span className="col col-md-1">
-                          {pokemon.stats[2].value}
+                        <span className="col col-1">
+                          {pokemon?.stats[1].value}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
                             role="progressbar"
-                            style={{ width: pokemon.stats[2].value }}
+                            variant={
+                              pokemon.stats[1].value >= 50
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={pokemon.stats[1].value}
                           />
                         </div>
                       </div>
-                      <div className="d-flex row">
-                        <span className="col col-md-2">Special Attack:</span>
-                        <span className="col col-md-1">
-                          {pokemon.stats[3].value}
+                      <div className="d-flex row ">
+                        <span className="col col-5 col-md-2">
+                          {capitalizeStr(pokemon.stats[2].name)}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: pokemon.stats[3].value }}
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex row">
-                        <span className="col col-md-2">Special Defense:</span>
-                        <span className="col col-md-1">
-                          {pokemon.stats[4].value}
+                        <span className="col col-1">
+                          {pokemon?.stats[2].value}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
                             role="progressbar"
-                            style={{ width: pokemon.stats[4].value }}
+                            variant={
+                              pokemon.stats[2].value >= 50
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={pokemon.stats[2].value}
                           />
                         </div>
                       </div>
-                      <div className="d-flex row">
-                        <span className="col col-md-2">Speed:</span>
-                        <span className="col col-md-1">
-                          {pokemon.stats[5].value}
+                      <div className="d-flex row ">
+                        <span className="col col-5 col-md-2">
+                          {capitalizeStr(pokemon.stats[3].name)}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
+                        <span className="col col-1">
+                          {pokemon?.stats[3].value}
+                        </span>
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
                             role="progressbar"
-                            style={{ width: pokemon.stats[5].value }}
+                            variant={
+                              pokemon.stats[3].value >= 50
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={pokemon.stats[3].value}
                           />
                         </div>
                       </div>
-                      <div className="d-flex row">
-                        <span className="col col-md-2">Total:</span>
-                        <span className="col col-md-1">
+                      <div className="d-flex row ">
+                        <span className="col col-5 col-md-2">
+                          {capitalizeStr(pokemon.stats[4].name)}
+                        </span>
+                        <span className="col col-1">
+                          {pokemon?.stats[4].value}
+                        </span>
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
+                            role="progressbar"
+                            variant={
+                              pokemon.stats[4].value >= 50
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={pokemon.stats[4].value}
+                          />
+                        </div>
+                      </div>
+                      <div className="d-flex row ">
+                        <span className="col col-5 col-md-2">
+                          {capitalizeStr(pokemon.stats[5].name)}
+                        </span>
+                        <span className="col col-1">
+                          {pokemon?.stats[5].value}
+                        </span>
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
+                            role="progressbar"
+                            variant={
+                              pokemon.stats[5].value >= 50
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={pokemon.stats[5].value}
+                          />
+                        </div>
+                      </div>
+                      <div className="d-flex row ">
+                        <span className="col col-5 col-md-2">Total:</span>
+                        <span className="col col-1">
                           {calcFeaturesTotal(pokemon.stats)}
                         </span>
-                        <div className="progress col">
-                          <div
-                            className="progress-bar"
+                        <div className=" col col-6 col-md-9">
+                          <ProgressBar
                             role="progressbar"
-                            style={{ width: calcFeaturesTotal(pokemon.stats) }}
+                            variant={
+                              calcFeaturesTotal(pokemon.stats) >= 300
+                                ? 'success'
+                                : 'danger'
+                            }
+                            now={calcFeaturesTotal(pokemon.stats) / 6}
                           />
                         </div>
                       </div>

@@ -13,11 +13,11 @@ interface ICardContainerProps {
 }
 
 const colors: colorsType = {
-  blue: '#79e3f7',
+  blue: '#5ed5eb',
   red: '#fa847f',
   green: '#6dd2af',
-  white: '#e8e8e8',
-  yellow: '#fffa65',
+  white: '#d7d7d7',
+  yellow: '#e7e25a',
   purple: '#cd84f1',
   brown: '#a08679',
   pink: '#f5aee1',

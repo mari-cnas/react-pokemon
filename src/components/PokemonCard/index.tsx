@@ -16,7 +16,7 @@ const PokemonCard: React.FC<IPokemonCardProps> = ({ pokemon }) => {
   return (
     <CardBg
       bgColor={pokemon.color}
-      className="d-flex flex-column position-relative px-3 py-3 "
+      className="d-flex flex-column position-relative px-3 py-3 w-100"
     >
       <IdBg bgColor={pokemon.color} className="align-self-end">
         <h2>#{String(pokemon.id).padStart(3, '0')}</h2>
