@@ -54,8 +54,6 @@ export const TypesBg = styled.div`
   background-color: rgba(255, 255, 255, 0.25);
   border-radius: 20px;
   display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const IdBg = styled.div<ICardContainerProps>`

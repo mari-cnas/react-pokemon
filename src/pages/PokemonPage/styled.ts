@@ -35,6 +35,9 @@ export const PokemonBg1 = styled.div<ICardContainerProps>`
   background-color: ${({ bgColor }) => colors[bgColor]};
   color: ${({ bgColor }) =>
     fontColors[bgColor] ? fontColors[bgColor] : fontColors.default};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 export const PokemonBg2 = styled.div`

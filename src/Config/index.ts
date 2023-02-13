@@ -11,6 +11,7 @@ const Config = {
   },
   api: {
     baseUrl: import.meta.env.VITE_POKEAPI_BASE_URL,
+    spritesBaseUrl: import.meta.env.VITE_POKEAPI_SPRITES_BASE_URL ?? '',
   },
 };
 

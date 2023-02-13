@@ -30,7 +30,7 @@ const Header: React.FC<IBaseComponentProps> = () => {
                 className="mb-3"
                 controlId="exampleForm.ControlTextarea1"
               >
-                <Form.Label>Qual o seu nome?</Form.Label>
+                <Form.Label>Qual é o seu nome?</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Digite seu nome"
@@ -38,16 +38,24 @@ const Header: React.FC<IBaseComponentProps> = () => {
                 />
               </Form.Group>
             </Form>
+            <Button variant="success" onClick={() => setShow(false)}>
+              Confirmar
+            </Button>
           </Modal.Body>
         </Modal>
-        <Row>
-          <Col className="d-flex flex-column justify-content-center my-5">
-            <h2>Olá, {user}</h2>
-            <h3>Bem Vindo(a)! 😄</h3>
+        <Row className=" justify-content-between py-5 ">
+          <Col className="d-flex flex-column justify-content-center ">
+            <h3>
+              Olá, {user}
+              <br />
+              Bem Vindo(a)! 😄
+            </h3>
           </Col>
-          <Col className="d-flex justify-content-end  my-5">
+          <Col className="d-flex justify-content-end circle-image">
             {' '}
-            <ProfileImg src={profile} className="img-fluid" />
+            <ProfileImg>
+              <img src={profile} alt="profile" />
+            </ProfileImg>
           </Col>
         </Row>
       </Container>

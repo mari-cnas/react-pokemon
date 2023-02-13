@@ -1,4 +1,4 @@
-import { memo, useMemo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 
 import { Col, Container, ProgressBar, Row, Spinner } from 'react-bootstrap';
 // import LanguageSwitcher from 'components/LanguageSwitcher';
@@ -15,7 +15,6 @@ import { calcFeaturesTotal } from 'context/PokemonsContext/helpers';
 
 import { unslugfy } from 'helpers';
 
-import useCapitalize from 'hooks/useCapitalize';
 import useTitle from 'hooks/useTitle';
 
 import { LoadingDiv } from 'styles/GlobalStyles';
@@ -25,7 +24,6 @@ import { Description, PokemonBg1, PokemonBg2, TypesBg } from './styled';
 
 const PokemonPage: React.FC = () => {
   const setTitle = useTitle();
-  const setCapitalize = useCapitalize();
   const { name } = useParams();
   const { pokemon, pokemonLoading, fetchPokemon } = usePokemons();
 
@@ -38,12 +36,6 @@ const PokemonPage: React.FC = () => {
     return capitalized;
   }, []);
 
-  const totalStatsValue = useMemo(() => {
-    return pokemon?.stats
-      ?.map(({ value }) => value)
-      ?.reduce((stat, prev) => prev + stat, 0);
-  }, [pokemon?.stats]);
-
   useEffect(() => {
     if (pokemon) setTitle(unslugfy(pokemon.name));
   }, [pokemon, setTitle]);
@@ -54,9 +46,9 @@ const PokemonPage: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <div className="d-flex flex-column">
       {pokemonLoading && (
-        <LoadingDiv className="d-flex aling-items-center justify-content-center">
+        <LoadingDiv className="d-flex align-items-center justify-content-center">
           <Spinner animation="border" variant="danger" className="my-auto" />
         </LoadingDiv>
       )}
@@ -68,7 +60,7 @@ const PokemonPage: React.FC = () => {
             {pokemonLoading && <p>Loading...</p>}
             {!pokemonLoading && pokemon && (
               <PokemonBg1 bgColor={pokemon.color}>
-                <Container>
+                <Container className="py-3  align-items-center justify-content-center flex-grow-1">
                   <Link to="/">
                     <button type="button" className="btn px-0 text-white">
                       ← Back
@@ -99,8 +91,6 @@ const PokemonPage: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </Container>
-                <Container>
                   <PokemonBg2 className="px-3 py-3">
                     <Description bgColor={pokemon.color}>
                       Description
@@ -280,7 +270,7 @@ const PokemonPage: React.FC = () => {
             )}
           </>
         )}
-    </>
+    </div>
   );
 };
 
